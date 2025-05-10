@@ -18,17 +18,18 @@ RUN sbt update
 # Final stage: Combine Python and Scala environments
 FROM python:3.9-slim
 
-# Install OpenJDK for Scala
+# Install OpenJDK and curl - fixed to properly install Java
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    openjdk-11-jre-headless \
+    default-jre \
     curl \
+    gnupg \
     && rm -rf /var/lib/apt/lists/*
     
 # Install SBT
-RUN curl -L -o sbt.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-1.6.2.deb && \
-    dpkg -i sbt.deb && \
-    rm sbt.deb && \
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
+    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
+    curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add && \
     apt-get update && \
     apt-get install -y sbt && \
     rm -rf /var/lib/apt/lists/*
@@ -53,7 +54,8 @@ COPY scala/ /app/scala/
 
 # Create a directory for environment variables
 RUN mkdir -p /app/config
-COPY .env /app/config/ || echo "No .env file found, will need to be provided at runtime"
+# Handle .env file - create an empty one if it doesn't exist
+RUN touch /app/config/.env
 
 # Expose port for Flask app
 EXPOSE 5000
