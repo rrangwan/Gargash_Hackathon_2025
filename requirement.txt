@@ -1,0 +1,6 @@
+flask
+flask-login
+snowflake-connector-python
+python-dotenv
+apscheduler
+bcrypt
