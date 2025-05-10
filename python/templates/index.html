@@ -4,20 +4,24 @@
 <div class="container">
     <h2>Car Goal Planner</h2>
     <form id="goal-form">
-        <h3>Goal</h3>
+        <h3>Car Details</h3>
         <label><input type="radio" name="is_new" value="true" checked> New Car</label>
         <label><input type="radio" name="is_new" value="false"> Used Car</label>
         <br><br>
+        
         <label for="model">Model:</label>
         <select id="model" name="model">
+            <option value="Mercedes C200 2020">Mercedes C200 2020</option>
             <option value="Mercedes S-Class">Mercedes S-Class</option>
             <option value="Mercedes E-Class">Mercedes E-Class</option>
             <option value="Maybach S-Class">Maybach S-Class</option>
+            <option value="Lancer EX 2016">Lancer EX 2016</option>
+            <option value="Toyota Prado 2018">Toyota Prado 2018</option>
         </select>
 
         <label for="year">Year:</label>
         <select id="year" name="year">
-            {% for year in range(2025, 2018, -1) %}
+            {% for year in range(2025, 2015, -1) %}
                 <option value="{{ year }}">{{ year }}</option>
             {% endfor %}
         </select>
@@ -30,27 +34,37 @@
         <label><input type="radio" name="payment_method" value="financing"> Financing</label>
 
         <div id="financing-options" style="display: none;">
-            <label for="finance_max_emi">Max EMI:</label>
-            <input type="number" id="finance_max_emi" name="max_emi" value="1000">
+            <label for="max_emi">Monthly EMI (AED):</label>
+            <input type="number" id="max_emi" name="max_emi" value="20000">
 
             <label for="max_term">Max Financing Term (months):</label>
             <input type="number" id="max_term" name="max_term" value="60">
 
-            <label for="down_payment">Max Down Payment:</label>
-            <input type="number" id="down_payment" name="down_payment" value="20000">
+            <label for="down_payment">Down Payment (AED):</label>
+            <input type="number" id="down_payment" name="down_payment" value="100000">
+            
+            <label for="interest_rate">Interest Rate (%):</label>
+            <input type="number" id="interest_rate" name="interest_rate" value="10" step="0.1">
         </div>
         <br><br>
-        <button type="submit">Submit</button>
+        <button type="submit">Calculate Plan</button>
     </form>
 
     <div id="results" style="display: none;">
-        <h3>Results</h3>
+        <h3>Your Car Purchase Plan</h3>
         <div id="time-chart"></div>
-        <p>Estimated Purchase Date: <span id="estimated-date"></span></p>
-        <p>Down Payment: $<span id="down-payment"></span></p>
-        <p>Car Price: $<span id="car-price"></span></p>
-        <p id="promotion" style="display: none;">Promotion Available!</p>
-        <button id="save-data">Save Data</button>
+        
+        <div class="result-details">
+            <h4>Summary</h4>
+            <p>Car Model: <span id="car-model"></span></p>
+            <p>Car Price: <span id="car-price"></span> AED</p>
+            <p>Estimated Purchase Date: <span id="estimated-date"></span></p>
+            <p>Down Payment: <span id="down-payment"></span> AED</p>
+            <p id="emi-details" style="display: none;">Monthly EMI: <span id="monthly-emi"></span> AED for <span id="payment-period"></span> months</p>
+        </div>
+        
+        <p id="promotion" style="display: none;">Promotion Available! Contact our sales team for more details.</p>
+        <button id="save-data">Save This Plan</button>
     </div>
 </div>
 {% endblock %}
