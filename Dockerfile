@@ -10,22 +10,22 @@ FROM hseeberger/scala-sbt:11.0.14.1_1.6.2_2.13.8 AS scala_base
 WORKDIR /app/scala
 
 # Copy Scala/SBT project files
-COPY build.sbt .
-COPY project/ ./project/
+COPY scala/build.sbt .
+COPY scala/project/ ./project/
 # Download dependencies (will be cached if no changes)
 RUN sbt update
 
 # Final stage: Combine Python and Scala environments
 FROM python:3.9-slim
 
-# Install OpenJDK and curl - fixed to properly install Java
+# Install OpenJDK and curl
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     default-jre \
     curl \
     gnupg \
     && rm -rf /var/lib/apt/lists/*
-    
+
 # Install SBT
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
     echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
@@ -46,22 +46,20 @@ COPY --from=scala_base /root/.sbt /root/.sbt
 COPY --from=scala_base /root/.cache /root/.cache
 
 # Create necessary directories
-RUN mkdir -p /app/python /app/scala
+RUN mkdir -p /app/python /app/scala /app/config
 
-# Copy application code
+# Copy application code and .env
 COPY python/ /app/python/
 COPY scala/ /app/scala/
+COPY .env /app/config/.env
+COPY entrypoint.sh /app/entrypoint.sh
 
-# Create a directory for environment variables
-RUN mkdir -p /app/config
-# Handle .env file - create an empty one if it doesn't exist
-RUN touch /app/config/.env
+# Make entrypoint executable
+RUN chmod +x /app/entrypoint.sh
 
-# Expose port for Flask app
+# Expose ports for Flask (5000) and Scala (8080)
 EXPOSE 5000
+EXPOSE 8080
 
-# Set working directory
-WORKDIR /app/python
-
-# Command to run the application
-CMD ["python", "app.py"]
+# Set entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]

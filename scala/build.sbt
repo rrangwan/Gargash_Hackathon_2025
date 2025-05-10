@@ -10,3 +10,6 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.1",
   "org.json4s" %% "json4s-jackson" % "4.0.3"
 )
+
+// Ensure SBT uses the correct resolver
+resolvers += "Akka Repository" at "https://repo.akka.io/maven"

@@ -1,3 +1,14 @@
-docker-compose up --build
+
+
+
+
+docker build -t car_goal_app .
+docker run -p 5000:5000 -p 8080:8080 car_goal_app
+
+
 
 Access the application at http://localhost:5000
+Username: testuser
+
+Password: password123
+

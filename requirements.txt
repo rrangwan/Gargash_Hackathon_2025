@@ -4,3 +4,9 @@ snowflake-connector-python
 python-dotenv
 apscheduler
 bcrypt
+plotly
+pandas
+numpy
+requests
+APScheduler
+# snowflake-connector-python==2.7.9
