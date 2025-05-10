@@ -1,0 +1,30 @@
+Configure Environment Variables:
+Update the .env file with your actual credentials for Snowflake:
+# Flask configuration
+SECRET_KEY=your-secret-key
+
+# Snowflake credentials
+SNOWFLAKE_USER=your-snowflake-user
+SNOWFLAKE_PASSWORD=your-snowflake-password
+SNOWFLAKE_ACCOUNT=your-snowflake-account
+SNOWFLAKE_WAREHOUSE=your-snowflake-warehouse
+SNOWFLAKE_DATABASE=your-snowflake-database
+SNOWFLAKE_SCHEMA=your-snowflake-schema
+
+Run the Application:
+bashcd python
+python app.py
+
+Login Credentials:
+The application has a mock user with the following credentials:
+
+Username: testuser
+Password: password123
+
+
+
+Additional Notes
+
+The application is currently using mocked Snowflake data. The real Snowflake connection is commented out in the code.
+If you need to use actual Snowflake, uncomment the relevant code in models.py and ensure your credentials are correct in the .env file.
+The scheduler is running and checking for promotions every 60 minutes.

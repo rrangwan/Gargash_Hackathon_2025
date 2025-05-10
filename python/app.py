@@ -1,10 +1,11 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, after_this_request
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from dotenv import load_dotenv
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 import bcrypt
 import logging
+import snowflake.connector 
 from python.models import MockSnowflake, User
 from python.utils import calculate_goal_progress, check_promotions
 
@@ -13,10 +14,30 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Load environment variables
-load_dotenv('/app/config/.env')
+load_dotenv('.env')  # Fixed path to .env file
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-dev-key')
+
+@app.after_request
+def add_security_headers(response):
+    csp_policy = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.plot.ly https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "img-src 'self' data: blob:; "
+        "connect-src 'self'; "
+        "frame-src 'self'; "
+        "font-src 'self' https://fonts.gstatic.com data:; "
+        "object-src 'none'; "
+        "base-uri 'self';"
+    )
+    response.headers['Content-Security-Policy'] = csp_policy
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
 
 # Initialize Flask-Login
 login_manager = LoginManager()

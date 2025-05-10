@@ -34,6 +34,15 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/ap
     apt-get install -y sbt && \
     rm -rf /var/lib/apt/lists/*
 
+# Install OpenJDK, curl and CA certificates
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        default-jre \
+        curl \
+        gnupg \
+        ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set up project structure
 WORKDIR /app
 
