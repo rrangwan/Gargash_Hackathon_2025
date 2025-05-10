@@ -64,8 +64,8 @@ Password: password123
 
 ## 📚 Additional Documentation
 
-- [ Link to your project presentation/pitch deck](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/Neural%20Drive.pdf)
-- [Link to your project presentation](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/Neural%20Drive.pptx)
+- [ Link to pitch deck](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/Neural%20Drive.pdf)
+- [Link to presentation slides](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/Neural%20Drive.pptx)
 
 
 
