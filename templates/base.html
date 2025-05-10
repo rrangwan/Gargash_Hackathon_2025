@@ -4,23 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.plot.ly; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'">
-
     <title>Car Goal Planner</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/plotly.min.js') }}"></script>
-
-
 </head>
-<body>
-    <nav>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px; line-height: 1.6; margin: 0; padding: 0; background-color: #f5f5f5; color: #333;">
+
+    <nav style="background: linear-gradient(135deg, #6a0dad, #4b0082); padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); display: flex; justify-content: space-between; align-items: center;">
         {% if current_user.is_authenticated %}
-            <span>Welcome, {{ current_user.id }}</span>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <span style="color: #ffd700; font-weight: 600; font-size: 1.2rem; padding: 0.6rem 1.2rem; border-radius: 4px;">
+                <img src="{{ url_for('static', filename='images/gg.jpg') }}" alt="Gargash Enterprises" style="width:16px; height:16px; vertical-align: middle;">
+                Welcome, {{ current_user.id }} 
+
+            </span>
+            <a href="{{ url_for('logout') }}" style="color: #ffd700; font-weight: 600; font-size: 1.2rem; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 4px; transition: all 0.3s ease;">Logout</a>
         {% else %}
-            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('login') }}" style="color: #ffd700; font-weight: 600; font-size: 1.2rem; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 4px; transition: all 0.3s ease;">Login</a>
         {% endif %}
     </nav>
-    {% block content %}{% endblock %}
+    
+    <div class="container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+        {% block content %}{% endblock %}
+    </div>
+    
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
