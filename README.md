@@ -25,6 +25,9 @@ tbd
 
 ```
 - Python 3.12+
+pip install flask flask-login snowflake-connector-python python-dotenv apscheduler
+
+
 - 
 ```
 
