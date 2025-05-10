@@ -34,15 +34,6 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/ap
     apt-get install -y sbt && \
     rm -rf /var/lib/apt/lists/*
 
-# Install OpenJDK, curl and CA certificates
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        default-jre \
-        curl \
-        gnupg \
-        ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
-
 # Set up project structure
 WORKDIR /app
 
@@ -57,8 +48,14 @@ COPY --from=scala_base /root/.cache /root/.cache
 # Create necessary directories
 RUN mkdir -p /app/python /app/scala /app/config
 
+ADD https://cdn.plot.ly/plotly-2.24.1.min.js /app/static/js/plotly.min.js
+
+
 # Copy application code and .env
 COPY python/ /app/python/
+COPY templates/ /app/python/templates/
+
+
 COPY scala/ /app/scala/
 COPY .env /app/config/.env
 COPY entrypoint.sh /app/entrypoint.sh

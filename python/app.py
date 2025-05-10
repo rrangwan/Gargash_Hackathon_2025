@@ -18,11 +18,26 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__, 
-            static_folder='static',
-            template_folder='python/templates')
-            
+app = Flask(__name__, static_folder='static', template_folder='/app/python/templates')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-dev-key')
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+# Initialize scheduler for promotion checks
+scheduler = BackgroundScheduler()
+scheduler.start()
+
+# User class for Flask-Login
+class FlaskUser(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return FlaskUser(user_id)
 
 @app.after_request
 def add_security_headers(response):
@@ -42,24 +57,6 @@ def add_security_headers(response):
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-XSS-Protection'] = '1; mode=block'
     return response
-
-# Initialize Flask-Login
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-# Initialize scheduler for promotion checks
-scheduler = BackgroundScheduler()
-scheduler.start()
-
-# User class for Flask-Login
-class FlaskUser(UserMixin):
-    def __init__(self, id):
-        self.id = id
-
-@login_manager.user_loader
-def load_user(user_id):
-    return FlaskUser(user_id)
 
 # Routes
 @app.route('/')
@@ -158,4 +155,7 @@ def check_promotion_job():
 scheduler.add_job(check_promotion_job, 'interval', minutes=60)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Use environment variables for production settings
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    port = int(os.getenv('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
