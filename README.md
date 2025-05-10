@@ -8,98 +8,66 @@
 
 ## 🌟 Problem Statement
 
-tbd
+How do we encourage more people to save enough and strive to earn a premium luxury car.
 
 ## 💡 Solution
 
-tbd 
+Help people consitently manage their finances and savings, leveraging opportunities offered by the Gargash group, including rental leasing opportunities, finance and investment offers, and training consumers about financial management.
 
 ## 🔧 Technical Architecture
 
-tbd
+Snowflake Data Management: A cloud-based data warehousing solution for efficient storage, processing, and querying of large datasets, ensuring smooth integration with all system components.
+
+Flask Backend: A lightweight Python web framework powering the backend, providing fast and scalable APIs to handle requests, serve data, and support machine learning operations.
+
+Bank Transactions API: A secure and robust API designed to handle bank transactions, integrating seamlessly with the backend for real-time data processing and validation.
+
+Web Application: A responsive and user-friendly interface allowing users to interact with the system, view transaction details, manage accounts, and access personalized financial insights.
+
+Machine Learning (Python): A suite of machine learning models implemented in Python to analyze user behavior and predict saving and spending habits. These models help offer personalized financial advice and forecast future financial trends.
+
+Customer Relationship Management (CRM): A system for managing interactions with customers, tracking user behavior, and analyzing data to improve user experience, engagement, and satisfaction.
+
+Cross-Selling Strategies: Targeted marketing techniques leveraging CRM data and machine learning insights to identify cross-selling opportunities across various business divisions, improving customer engagement and increasing revenue.
 
 
 ## 🖥️ Installation & Setup
 
-### Prerequisites
+docker build -t car_goal_app .
 
-```
-- Python 3.12+
-pip install flask flask-login snowflake-connector-python python-dotenv apscheduler
+docker run -p 5000:5000 -p 8080:8080 car_goal_app
+
+Access the application at http://localhost:5000
 
 
-- 
-```
+Username: testuser
 
-### Installation Steps
+Password: password123
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-.git
-   cd Fetch.AI_Hackathon_Dubai_2025_submission-
-   ```
-
-2. Install dependencies
-   ```bash
-   pip install -r requirements.txt
-   # Additional setup commands if needed
-   ```
-1. You have to install poetry. It's a python package manager.
-
-2. Install all dependencies:
-```bash
-    poetry install
-```
-
-3. Create and fill up the .env file:
-```bash
-    PORT=8000
-    SEED="123456"
-    ASI1_API_KEY="ASI1_KEY"
-    WAVER_ADDRESS="localhost:5000" # service that able to generate .wav file 
-```
-
-4. Run the agent in dev mode: 
-```bash
-    ./dev_run.sh
-```
-
-5. Test the agent by test.py
-```bash
-    poetry run python test.py
-```
-6. Clone and set up the F5-TTS model
-   - Follow the instructions in the [F5-TTS GitHub repository](https://github.com/SWivid/F5-TTS) to clone and configure the model for voice synthesis.
-   - We hosted it on a instance and made a PPT.
    
 
 ## 🎬 Demo
 
 ### Video Demo
-[Link to demo video](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/demo.mp4)
+[Link to demo video](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/neural_drive_demo.mp4)
 
-### Screenshots
-[screenshots showcasing agent in action](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/screenshots.pdf)
+
 
 
 ## 👥 Team Information
 
 ### Team Members
 
-- **[Member 1 Raj Rangwani]** - [Developer]
-- **[Member 2 Ruhan Goltay ]** - [Developer]
-- **[Member 3 Divya Kishore]** - [Developer]
+- **[Member 1 Raj Rangwani]** 
+- **[Member 2 Ruhan Goltay ]** 
+- **[Member 3 Divya Kishore]** 
 
 ## 📚 Additional Documentation
 
-- [ Link to your project presentation/pitch deck](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/CelebrityAI.pdf)
-- [Link to one-page project summary](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/CelebrityAI.pptx)
-- [Summary](https://github.com/rrangwan/Fetch.AI_Hackathon_Dubai_2025_submission-/blob/main/docs/summary.pdf)
+- [ Link to your project presentation/pitch deck](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/Neural%20Drive.pdf)
+- [Link to your project presentation](https://github.com/rrangwan/Gargash_Hackathon_2025/blob/main/docs/Neural%20Drive.pptx)
 
 
-## 📝 License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
 
 ---
 
