@@ -1,12 +1,11 @@
 import pandas as pd
 import numpy as np
-import requests
 import os
 import bcrypt
 
 class MockSnowflake:
     def __init__(self):
-        # Mock data for cars (fallback if Scala service is unavailable)
+        # Mock data for cars
         self.car_data = pd.DataFrame({
             'model': ['Mercedes S-Class', 'Mercedes E-Class', 'Maybach S-Class'],
             'year': [2025, 2024, 2023],
@@ -16,20 +15,8 @@ class MockSnowflake:
         })
 
     def query_cars(self, is_new, model, year, max_mileage):
-        # Try calling Scala service
-        try:
-            response = requests.post('http://localhost:8080/query', json={
-                'is_new': is_new,
-                'model': model,
-                'year': year,
-                'max_mileage': max_mileage
-            })
-            if response.status_code == 200:
-                return pd.DataFrame(response.json())
-        except requests.RequestException:
-            print("Scala service unavailable, using mock data")
-
-        # Fallback to mock data
+        # Mock filter
+        # Real Snowflake code (commented out):
         # from app import connect_to_snowflake
         # conn = connect_to_snowflake()
         # if conn:
@@ -42,7 +29,6 @@ class MockSnowflake:
         #     conn.close()
         #     return df
 
-        # Mock filter
         df = self.car_data[
             (self.car_data['year'] == year) &
             (self.car_data['model'] == model) &
@@ -51,17 +37,7 @@ class MockSnowflake:
         return df
 
     def save_user_data(self, user_id, goal_data):
-        # Simulate saving to Snowflake via Scala service
-        try:
-            response = requests.post('http://localhost:8080/save', json={
-                'user_id': user_id,
-                'goal_data': goal_data
-            })
-            if response.status_code == 200:
-                print(f"Mock: Saved data via Scala service for user {user_id}")
-        except requests.RequestException:
-            print("Scala service unavailable, using mock save")
-
+        # Mock save
         # Real Snowflake code (commented out):
         # from app import connect_to_snowflake
         # conn = connect_to_snowflake()

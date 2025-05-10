@@ -4,8 +4,13 @@ from dotenv import load_dotenv
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 import bcrypt
+import logging
 from python.models import MockSnowflake, User
 from python.utils import calculate_goal_progress, check_promotions
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv('/app/config/.env')
@@ -35,80 +40,82 @@ def load_user(user_id):
 @app.route('/')
 @login_required
 def home():
+    logger.debug("Rendering home page")
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        logger.debug("User already authenticated, redirecting to home")
         return redirect(url_for('home'))
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
         user = User()
         if user.authenticate(username, password):
             login_user(FlaskUser(username))
+            logger.debug(f"User {username} logged in")
             return redirect(url_for('home'))
+        logger.warning("Invalid login attempt")
         return render_template('login.html', error="Invalid credentials")
     return render_template('login.html')
 
 @app.route('/logout')
 @login_required
 def logout():
+    logger.debug(f"User {current_user.id} logged out")
     logout_user()
     return redirect(url_for('login'))
 
 @app.route('/submit_goal', methods=['POST'])
 @login_required
 def submit_goal():
-    goal_data = request.json
-    mock_snowflake = MockSnowflake()
+    try:
+        goal_data = request.json
+        logger.debug(f"Received goal data: {goal_data}")
+        mock_snowflake = MockSnowflake()
 
-    # Query car data
-    df = mock_snowflake.query_cars(
-        is_new=goal_data['is_new'],
-        model=goal_data['model'],
-        year=goal_data['year'],
-        max_mileage=goal_data['max_mileage']
-    )
+        # Query car data (Python mock)
+        df = mock_snowflake.query_cars(
+            is_new=goal_data.get('is_new', True),
+            model=goal_data.get('model', ''),
+            year=goal_data.get('year', 2025),
+            max_mileage=goal_data.get('max_mileage', 50000)
+        )
 
-    if df.empty:
-        return jsonify({'error': 'No matching cars found'}), 404
+        if df.empty:
+            logger.warning("No matching cars found")
+            return jsonify({'error': 'No matching cars found'}), 404
 
-    car_price = df.iloc[0]['price']
-    goal_data['car_price'] = car_price
+        car_price = df.iloc[0]['price']
+        goal_data['car_price'] = car_price
 
-    # Calculate progress
-    result = calculate_goal_progress(goal_data)
+        # Calculate progress
+        result = calculate_goal_progress(goal_data)
 
-    # Check promotions
-    promotion = check_promotions(goal_data['model'])
+        # Check promotions
+        promotion = check_promotions(goal_data.get('model', ''))
 
-    # Save data
-    user = User()
-    user.save_goal(current_user.id, goal_data)
+        # Save data
+        user = User()
+        user.save_goal(current_user.id, goal_data)
 
-    return jsonify({
-        'time_chart': result['time_chart'].to_dict(orient='records'),
-        'estimated_date': result['estimated_date'],
-        'down_payment': result['down_payment'],
-        'car_price': result['car_price'],
-        'promotion': promotion
-    })
+        logger.debug(f"Returning result: {result}")
+        return jsonify({
+            'time_chart': result['time_chart'].to_dict(orient='records'),
+            'estimated_date': result['estimated_date'],
+            'down_payment': result['down_payment'],
+            'car_price': result['car_price'],
+            'promotion': promotion
+        })
+    except Exception as e:
+        logger.error(f"Error in submit_goal: {str(e)}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
 
 # Scheduler job to check promotions (mocked)
 def check_promotion_job():
-    # Mock: Check promotions for all users
+    logger.debug("Checking promotions for all users")
     print("Mock: Checking promotions for all users")
-    # Real implementation would query Snowflake and send notifications
-    # conn = connect_to_snowflake()
-    # if conn:
-    #     cursor = conn.cursor()
-    #     cursor.execute("SELECT user_id, goal_data FROM user_goals")
-    #     for user_id, goal_data in cursor:
-    #         if check_promotions(goal_data['model']):
-    #             print(f"Promotion available for {user_id}")
-    #     cursor.close()
-    #     conn.close()
 
 scheduler.add_job(check_promotion_job, 'interval', minutes=60)
 
@@ -124,7 +131,7 @@ def connect_to_snowflake():
         )
         return conn
     except Exception as e:
-        print(f"Error connecting to Snowflake: {e}")
+        logger.error(f"Error connecting to Snowflake: {str(e)}")
         return None
 
 if __name__ == '__main__':

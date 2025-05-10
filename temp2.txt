@@ -1,0 +1,32 @@
+help me create a webapp
+
+it visualizes data, can you use python. We will use snowflake as well, SQL, java, Scala
+
+1st the user selects (radio buttons):
+1. Goal 
+{
+options: 
+1.New car / Used car (toggle)
+2. Model (drop down list of mercedes/mayback models)
+3. Year (drop down list between current year and past 6 years)
+4. Max mileage (of used cars)
+}
+
+2. Financing / Cash (toggle)
+if Financing:
+{
+1. Max EMI (textbox)
+2. Max Financing term (text box)
+3. Max Down Payment (text box)
+}
+The webapp sends these values to the server, server responds with following values to display:
+
+1. Time chart, showing progress towards meeting the goal of purchasing car based on internal projects
+
+2. Estimated Date, and Down Payment Value, and Car Price
+
+3. Button to Save the data of the customer (working button), and they would have a log in.
+
+4. Ability to notify the webapp user if there is a promotion on the car they are looking for, or to cross sale leasing contracts for housing or investment products 
+
+5. Ability of user to change at any time the inputed data, and for the webapp to always dynamically update
