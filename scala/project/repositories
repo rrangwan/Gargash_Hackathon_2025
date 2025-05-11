@@ -1,0 +1,6 @@
+[repositories]
+  local
+  maven-central: https://repo1.maven.org/maven2/
+  typesafe-releases: https://repo.typesafe.com/typesafe/releases
+  sbt-releases: https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases
+  akka-releases: https://repo.akka.io/maven

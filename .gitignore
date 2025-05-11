@@ -1,0 +1,9 @@
+Add-Content .gitignore @"
+# SBT
+scala/project/target/
+scala/target/
+
+# Other build files
+.scala-build/
+.metals/
+.bloop/
